@@ -1,0 +1,237 @@
+:last-update-label!:
+:toc: left
+:toclevels: 3
+:numbered:
+:sectanchors:
+:sectlinks:
+:experimental:
+
+= Avoiding Merge Conflicts
+
+[id="essential_workflow"]
+== Essential workflow
+
+. Clone your fork of the upstream repository you will be contributing to:
++
+[subs="+quotes"]
+----
+$ git clone _<address_of_your_fork>_
+----
+
+. Change your working directory to the generated local copy.
+
+. Create a remote for the upstream of your fork:
++
+[subs="+quotes"]
+----
+$ git remote add upstream _<address_of_upstream_repository>_
+----
+
+. Pull any upstream changes and rebase based on upstream's `master` branch:
++
+----
+$ git pull --rebase upstream master
+----
++
+[NOTE]
+====
+* This command will pull all of the upstream changes, apply them, then replay your local commits back on top of the updated branch contents.
+* You should run `git pull --rebase upstream master` any time changes are committed to the upstream repository.
+Ensuring that you are using the latest upstream `master` branch will prevent issues which occur due to using an old version of the `master` branch.
+====
+
+. Create your topic branch based on the latest upstream `master`:
++
+[subs="+quotes"]
+----
+$ git checkout -b _<topic_branch>_
+----
++
+[NOTE]
+====
+When creating a new branch, the branch will be based on the content of the _current_ branch.
+Ensure that you are on the `master` branch and have any recent upstream changes pulled and rebased before creating your topic branch.
+This will prevent issues and merge conflicts which occur due to using an old version of the `master` branch.
+====
+
+. Make small, atomic changes to the content for your topic branch.
+Only commit the changes once you are certain that your changes are complete:
++
+[subs="+quotes"]
+----
+$ git add --all
+$ git commit -m "_<commit_message>_"
+----
++
+[NOTE]
+====
+* You may need to switch branches before your work is entirely ready to commit.
+To do this cleanly, see <<using_the_stash>>.
+* You should ensure that your changes are small and atomic so that your commit is as focused as possible.
+A focused commit will only touch the information relevant to it.
+A smaller affected surface means less opportunities for merge conflicts.
+====
+
+[id="pull_request_workflow"]
+== Pull request workflow
+
+. If changes are requested on your pull request, you can amend this commit and force-push the changes to your fork:
++
+[subs="+quotes"]
+----
+$ git add --all
+$ git commit --amend
+$ git push --force origin _<topic_branch>_
+----
++
+[NOTE]
+====
+Amending the commit and force-pushing to your fork will update the pull request with your changes while ensuring you only add a single commit to the repository.
+This helps keep the Git history clean while avoiding potential merge conflicts for others in the future.
+====
+
+[id="using_the_stash"]
+== Using the stash
+
+You may need to switch branches in your local repository before the changes you have made are ready to commit.
+In this case, `git` will report an error when you attempt to switch branches due to the current status not being in a clean state.
+The `git stash` command provides a way to ensure a clean Git state while preserving your in-progress changes.
+
+[id="stashing_changes"]
+=== Stashing changes
+
+To preserve your in-progress edits while keeping the Git state clean, use the following command:
+
+----
+$ git stash
+----
+
+This command will stash your changes away and return Git to a clean state.
+You can now safely switch to the required branch.
+
+[id="restoring_stashed_changes"]
+=== Restoring stashed changes
+
+Once you are done with the work required on a different branch, checkout the branch you were previously working on and use the following command to restore your previous edits:
+
+----
+$ git stash pop
+----
+
+[id="listing_stashed_changes"]
+=== Listing stashed changes
+
+If you have more than one set of changes stashed, you can view the contents of your stash with the following command:
+
+----
+$ git stash list
+----
+
+[id="using_visual_tools"]
+== Using visual tools
+
+Git allows you to define visual tools for working with diffs and merges.
+link:http://meldmerge.org/[Meld] is a recommended choice.
+
+To install Meld on Fedora, use the following command:
+
+----
+$ sudo dnf install meld
+----
+
+[id="configuring_the_diff_tool"]
+=== Configuring the diff tool
+
+To configure Meld as your diff tool, add the following to your [filename]`~/.gitconfig` file:
+
+----
+[diff]
+  tool = meld
+[difftool]
+  prompt = false
+[difftool "meld"]
+  cmd = meld "$LOCAL" "$REMOTE"
+----
+
+Use the configured visual diff tool with the following command:
+
+----
+$ git difftool
+----
+
+[NOTE]
+====
+The diff tool does not replace the functionality of the `git diff` command.
+To use the configured visual diff tool, use the `git difftool` command.
+====
+
+[id="configuring_the_merge_tool"]
+=== Configuring the merge tool
+
+To configure Meld as your merge tool, add the following to your [filename]`~/.gitconfig` file:
+
+----
+[merge]
+  tool = meld
+[mergetool "meld"]
+  cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+----
+
+Use the configured visual merge tool with the following command:
+
+----
+$ git mergetool
+----
+
+[NOTE]
+====
+* The visual merge tool is _not_ used to *perform* merges.
+Merges should be performed as usual using the `git merge` command.
+* The visual merge tool applies once a merge conflict appears.
+To resolve the merge conflict using the configured merge tool, use the `git mergetool` command.
+====
+
+[id="misc_advice"]
+== Miscellaneous advice
+
+. **Know who is working on what and when.**
+** This is the primary social aspect of what causes the majority of the remaining merge conflicts you are likely to encounter.
+By knowing who is working on a specific section at a specific time, you can ensure that no one else works on the same content while their work is in progress.
+. Be vigilant about the status of the Git repository.
+** Use `git status` often.
+** Make sure that your Git repository is as up-to-date as possible with the upstream repository.
+** Before beginning new work, checkout your `master` branch, pull and rebase from the upstream repository's `master` branch, _then_ create your topic branch.
+. Use one line per sentence when writing in AsciiDoc.
+** Using one line per sentence makes `git` logs and diffs cleaner.
+This practice also ensures that no merge conflicts will occur if two separate sentences are changed within a single paragraph.
+** AsciiDoc still renders sentences on individual lines as coherent paragraphs until two new lines are encountered in a row.
+
+[id="condensed_workflows"]
+== Condensed workflows
+
+[id="condensed_essential_workflow"]
+=== Essential workflow
+
+[subs="+quotes"]
+----
+git clone _<address_of_your_fork>_
+cd _<repository_directory>_
+git remote add upstream _<address_of_upstream_repository>_
+git checkout master
+git pull -r upstream master
+git checkout -b _<topic_branch>_
+git add ...
+git commit -m "_<commit_message>_"
+----
+
+[id="condensed_pull_request_workflow"]
+=== Pull request workflow
+
+[subs="+quotes"]
+----
+git checkout _<topic_branch>_
+git pull -r upstream master
+git add ...
+git commit --amend
+git push -f origin _<topic_branch>_
+----
