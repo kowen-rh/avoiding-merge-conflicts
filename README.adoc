@@ -9,7 +9,7 @@
 = Avoiding Merge Conflicts
 
 [id="essential_workflow"]
-== Essential workflow
+== Essential workflow - But with some Atomic changes
 
 . Clone your fork of the upstream repository you will be contributing to:
 +
