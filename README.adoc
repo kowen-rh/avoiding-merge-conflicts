@@ -9,7 +9,7 @@
 = Avoiding Merge Conflicts
 
 [id="essential_workflow"]
-== Essential workflow
+== Essential Workflow
 
 . Clone your fork of the upstream repository you will be contributing to:
 +
@@ -35,7 +35,7 @@ $ git pull --rebase upstream master
 +
 [NOTE]
 ====
-* This command will pull all of the upstream changes, apply them, then replay your local commits back on top of the updated branch contents.
+* This command will pull the upstream changes, apply them, then replay your local commits back on top of the updated branch contents.
 * You should run `git pull --rebase upstream master` any time changes are committed to the upstream repository.
 Ensuring that you are using the latest upstream `master` branch will prevent issues which occur due to using an old version of the `master` branch.
 ====
