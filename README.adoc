@@ -51,7 +51,7 @@ $ git checkout -b _<topic_branch>_
 ====
 When creating a new branch, the branch will be based on the content of the _current_ branch.
 Ensure that you are on the `master` branch and have any recent upstream changes pulled and rebased before creating your topic branch.
-This will prevent issues and merge conflicts which occur due to using an old version of the `master` branch, bro.
+This will prevent issues and merge conflicts which occur due to using an old version of the `master` branch.
 ====
 
 . Make small, atomic changes to the content for your topic branch.
