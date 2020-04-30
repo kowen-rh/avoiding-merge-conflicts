@@ -201,7 +201,7 @@ By knowing who is working on a specific section at a specific time, you can ensu
 ** Use `git status` often.
 ** Make sure that your Git repository is as up-to-date as possible with the upstream repository.
 ** Before beginning new work, checkout your `master` branch, pull and rebase from the upstream repository's `master` branch, _then_ create your topic branch.
-. Use one line per sentence when writing in AsciiDoc.
+. _(Optional)_ Use one line per sentence when writing in AsciiDoc.
 ** Using one line per sentence makes `git` logs and diffs cleaner.
 This practice also ensures that no merge conflicts will occur if two separate sentences are changed within a single paragraph.
 ** AsciiDoc still renders sentences on individual lines as coherent paragraphs until two new lines are encountered in a row.
